@@ -13,8 +13,8 @@ class PaymentService extends HTTPService {
 	}
 
 	/**
-	 * After receiving a payment notification from Xfers, you need to do 
-	 * verification with Xfers to confirm that that it did indeed originate 
+	 * After receiving a payment notification from Xfers, you need to do
+	 * verification with Xfers to confirm that that it did indeed originate
 	 * from Xfers.
 	 *
 	 * @param mixed $config
@@ -49,11 +49,11 @@ class PaymentService extends HTTPService {
 		}
 
 		$data = array(
-			'API_KEY' => $config['API_KEY'],
+			'api_key' => $config['API_KEY'],
 			'signature' => self::_generateSignature($config, $fields)
 		);
 		$data = array_merge($data, $fields);
-		
+
 		// do the actual post to Xfers servers
 		$result = self::doXfersPost(self::_getAPIURL($config, 'payments_validate'), $data);
 

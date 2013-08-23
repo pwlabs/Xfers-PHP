@@ -29,7 +29,7 @@ class TransactionService extends HTTPService {
 	 * @throws Exception
 	 */
 	public static function getMerchantTransactions($config, $fields) {
-		
+
 		// Required Configurations
 		if (!isset($config['API_KEY'])) {
 			throw new Exception('Invalid API Key.');
@@ -39,7 +39,7 @@ class TransactionService extends HTTPService {
 		}
 
 		$params = array(
-			'API_KEY' => $config['API_KEY'],
+			'api_key' => $config['API_KEY'],
 			'signature' => self::_generateSignature($config)
 		);
 		if (isset($fields['filter'])) {
@@ -48,7 +48,7 @@ class TransactionService extends HTTPService {
 		if (isset($fields['before_id'])) {
 			$params['before_id'] = $fields['before_id'];
 		}
-		
+
 		// do the actual post to Xfers servers
 		$result = self::doXfersGet(self::_getAPIURL($config, 'transactions'), $params);
 
@@ -65,18 +65,22 @@ class TransactionService extends HTTPService {
 			throw new Exception('Invalid API Secret.');
 		}
 
-		if (!isset($fields['transaction_id'])) {
+		if (!isset($fields['txn_id'])) {
 			throw new Exception('Invalid Xfers Transaction ID.');
 		}
 
 		// prepare HTTP POST variables
 		$params = array(
-			'API_KEY' => $config['API_KEY'],
+			'api_key' => $config['API_KEY'],
 			'signature' => self::_generateSignature($config)
 		);
 
 		// do the actual post to Xfers servers
-		$result = self::doXfersGet(self::_getAPIURL($config, 'transaction') . $fields['transaction_id'], $params);
+		$result = self::doXfersGet(self::_getAPIURL($config, 'transaction') . $fields['txn_id'], $params);
+
+		if ($result == 'Invalid transaction') {
+			throw new Exception('Invalid transaction');
+		}
 
 		return $result;
 	}
@@ -91,7 +95,7 @@ class TransactionService extends HTTPService {
 			throw new Exception('Invalid API Secret.');
 		}
 
-		if (!isset($fields['transaction_id'])) {
+		if (!isset($fields['txn_id'])) {
 			throw new Exception('Invalid Xfers Transaction ID.');
 		}
 
@@ -107,9 +111,13 @@ class TransactionService extends HTTPService {
 		if (self::_validateStatus($fields['status'])) {
 			$data['status'] = $fields['status'];
 		}
-		
+
 		// do the actual post to Xfers servers
-		$result = self::doXfersPut(self::_getAPIURL($config, 'transaction') . $fields['transaction_id'], $data);
+		$result = self::doXfersPut(self::_getAPIURL($config, 'transaction') . $fields['txn_id'], $data);
+
+		if ($result == 'Invalid transaction status change') {
+			throw new Exception('Invalid transaction status change');
+		}
 
 		return $result;
 	}

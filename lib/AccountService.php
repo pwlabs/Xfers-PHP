@@ -26,7 +26,7 @@ class AccountService extends HTTPService {
 
 		// prepare HTTP POST variables
 		$fields = array(
-			'API_KEY' => $config['RESELLER_API_KEY'],
+			'api_key' => $config['RESELLER_API_KEY'],
 			'signature' => self::_generateSignature($config, $account_details['email'])
 		);
 		$fields = array_merge($account_details, $fields);
@@ -49,7 +49,7 @@ class AccountService extends HTTPService {
 
 		// prepare HTTP GET variables
 		$fields = array(
-			'API_KEY' => $config['RESELLER_API_KEY'],
+			'api_key' => $config['RESELLER_API_KEY'],
 			'signature' => self::_generateSignature($config, $email)
 		);
 		$fields['email'] = $email;
