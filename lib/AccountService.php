@@ -34,8 +34,8 @@ class AccountService extends HTTPService {
 		// do the actual post to Xfers servers
 		$result = self::doXfersPost(self::_getAPIURL($config, 'accounts'), $fields);
 
-		if (isset($result->{'API_KEY'})) {
-			$result->{'complete_registration_link'} = self::_getURL($config, 'account_registration') . '/' . $result->{'API_KEY'};
+		if (isset($result->{'api_key'})) {
+			$result->{'complete_registration_link'} = self::_getURL($config, 'account_registration') . '/' . $result->{'api_key'};
 		}
 
 		return $result;
